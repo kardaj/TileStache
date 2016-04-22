@@ -376,9 +376,9 @@ def query_columns(dbinfo, srid, subquery, bounds, zoom):
         while (abs(bounds[2] - bounds[0]) * abs(bounds[2] - bounds[0])) < 1.61e15:
             bbox = 'ST_MakeBox2D(ST_MakePoint(%f, %f), ST_MakePoint(%f, %f))' % bounds
             bbox = 'ST_SetSRID(%s, %d)' % (bbox, srid)
-
-            query = subquery.replace('!bbox!', bbox).replace('!zoom!', zoom)
-
+            query = subquery.replace('!bbox!', bbox)\
+                .replace('!zoom!', str(zoom))
+            print '[%s]' % query
             db.execute(query + '\n LIMIT 1')  # newline is important here, to break out of comments.
             row = db.fetchone()
 
@@ -412,7 +412,9 @@ def build_query(srid, subquery, subcolumns, bbox, tolerance, zoom, is_geo, is_cl
     if is_geo:
         geom = 'ST_Transform(%s, 4326)' % geom
 
-    subquery = subquery.replace('!bbox!', bbox).replace('!zoom!', zoom)
+    subquery = subquery.replace('!bbox!', bbox)\
+        .replace('!zoom!', str(zoom))
+
     columns = ['q."%s"' % c for c in subcolumns if c not in ('__geometry__', )]
 
     if '__geometry__' not in subcolumns:
@@ -430,5 +432,4 @@ def build_query(srid, subquery, subcolumns, bbox, tolerance, zoom, is_geo, is_cl
                 ) AS q
               WHERE ST_IsValid(q.__geometry__)
                 AND q.__geometry__ && %(bbox)s
-                AND ST_Intersects(q.__geometry__, %(bbox)s)''' \
-            % locals()
+                AND ST_Intersects(q.__geometry__, %(bbox)s)''' % locals()

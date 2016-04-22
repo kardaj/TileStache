@@ -257,6 +257,7 @@ class Provider:
     def renderTile(self, width, height, srs, coord):
         """ Render a single tile, return a SaveableResponse instance.
         """
+        zoom = str(coord.zoom)
         nw = self.layer.projection.coordinateLocation(coord)
         se = self.layer.projection.coordinateLocation(coord.right().down())
 
@@ -269,8 +270,7 @@ class Provider:
             [(ul.x, ul.y), (lr.x, ul.y), (lr.x, lr.y), (ul.x, lr.y)]) or None
 
         db = _connect(self.dbdsn).cursor(cursor_factory=RealDictCursor)
-
-        db.execute(self.query.replace('!bbox!', bbox).replace('!zoom!', coord.zoom))
+        db.execute(self.query.replace('!bbox!', bbox).replace('!zoom!', zoom))
         rows = db.fetchall()
 
         db.close()
