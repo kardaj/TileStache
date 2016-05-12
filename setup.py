@@ -20,13 +20,14 @@ def is_installed(name):
         return False
 
 
-requires = ['ModestMaps >=1.3.0','simplejson', 'Werkzeug']
+requires = ['ModestMaps >=1.3.0', 'simplejson', 'Werkzeug',
+            'shapely', 'mapnik', 'psycopg2', 'gdal', 'uwsgi', 'redis']
 
 # Soft dependency on PIL or Pillow
 if is_installed('PIL'):
     requires.append('PIL')
 else:
-    requires.append('Pillow')
+    requires.append('Pillow <= 2.9.0')
 
 
 setup(name='TileStache',
@@ -42,7 +43,8 @@ setup(name='TileStache',
                 'TileStache.Goodies.Caches',
                 'TileStache.Goodies.Providers',
                 'TileStache.Goodies.VecTiles'],
-      scripts=['scripts/tilestache-compose.py', 'scripts/tilestache-seed.py', 'scripts/tilestache-clean.py', 'scripts/tilestache-server.py', 'scripts/tilestache-render.py', 'scripts/tilestache-list.py'],
+      scripts=['scripts/tilestache-compose.py', 'scripts/tilestache-seed.py', 'scripts/tilestache-clean.py',
+               'scripts/tilestache-server.py', 'scripts/tilestache-render.py', 'scripts/tilestache-list.py'],
       data_files=[('share/tilestache', ['TileStache/Goodies/Providers/DejaVuSansMono-alphanumeric.ttf'])],
       package_data={'TileStache': ['VERSION', '../doc/*.html']},
       license='BSD')

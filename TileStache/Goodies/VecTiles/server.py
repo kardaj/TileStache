@@ -57,6 +57,9 @@ class Provider:
             This behavior is modeled on Mapnik's similar bbox token feature:
             https://github.com/mapnik/mapnik/wiki/PostGIS#bbox-token
 
+            If the query contains the token "!zoom!", it will be replaced an
+            integer representing the zoom level of the tile.
+
           clip:
             Optional boolean flag determines whether geometries are clipped to
             tile boundaries or returned in full. Default true: clip geometries.
